@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import Movie from "./Movie";
+import './App.css';
 
 // App 클래스는 React.Component 클래스를 상속받음
 // 클래스형 컴포넌트가 되려면 'App 클래스가 리액트가 제공하는 Component 클래스를 반드시 상속받아야 한다는 것'
@@ -18,7 +20,7 @@ class App extends React.Component {
       data: { // 여기서 data -> 
         data: { movies }, // 여기서 data -> movies 진행
       },
-    } = await axios.get('https://yts-proxy.now.sh/list_movies.json');
+    } = await axios.get('https://yts-proxy.now.sh/list_movies.json?sort_by=rating');
     // ES6 에서는 객체의 키와 대입할 변수의 이름이 같다면 코드를 축약할 수 있음
     this.setState({movies, isLoading: false}); // movies, isLoading state 를 변경
   }
@@ -31,9 +33,32 @@ class App extends React.Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, movies } = this.state;
     // We are ready 부분에 영화 데이터를 출력할 것
-    return <div>{isLoading ? 'Loading...' : 'We are ready'}</div>;
+    return (
+      <section>
+        {isLoading
+        ? (
+          <div class="loader">
+            <span class="loader__text">Loading...</span>
+          </div>
+        )
+        : (
+          <div class="movies">
+            {movies.map(movie => (
+              <Movie
+              key={movie.id}
+              id={movie.id}
+              year={movie.year}
+              title={movie.title}
+              summary={movie.summary}
+              poster={movie.medium_cover_image}
+            />
+            ))}
+          </div>
+        )}
+      </section>
+    )
   }
 }
 
