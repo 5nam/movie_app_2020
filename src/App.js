@@ -3,48 +3,26 @@ import React from "react";
 // App 클래스는 React.Component 클래스를 상속받음
 // 클래스형 컴포넌트가 되려면 'App 클래스가 리액트가 제공하는 Component 클래스를 반드시 상속받아야 한다는 것'
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log('hello');
-  }
-
   state = {
-    count: 0,
+    isLoading: true,
+    movies: [], // 로딩된 영화 데이터를 저장할 수 있도록
+    // setState 함수로 필요할 때 추가하면 안되는 건가요?
+    // 별로 좋지 않은 방법 - 미리 데이터를 정의하는 것이 좋음
   };
 
-  add = () => {
-    this.setState(current => ({
-      count: current.count + 1,
-    }));
-  }
-
-  minus = () => {
-    this.setState(current => ({
-      count: current.count - 1,
-    }))
-  }
-
+  // 첫 번째 인자로 setTimeout(...) 을 전달
+  // 두 번째 인자로 6000 밀리초 전달
   componentDidMount() {
-    console.log('component rendered')
-  }
-
-  componentDidUpdate() {
-    console.log('I just updated');
-  }
-
-  componentWillUnmount() {
-    console.log('Goodbye, cruel world');
+    // 영화 데이터 로딩! : 영화 데이터 로딩이 완료되면
+    setTimeout(() => {
+      this.setState({isLoading: false});
+    }, 6000)
   }
 
   render() {
-    console.log("I'm rendering");
-    return (
-      <div>
-        <h1>The number is: {this.state.count}</h1>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
-      </div>
-    );
+    const { isLoading } = this.state;
+    // We are ready 부분에 영화 데이터를 출력할 것
+    return <div>{isLoading ? 'Loading...' : 'We are ready'}</div>;
   }
 }
 
